@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role-based access for Jain University bus management",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "driver", "admin"] },
+        "campus": { "type": "string" },
+        "assignedBusId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Bus": {
+      "title": "Bus",
+      "description": "A college bus assigned to a transit route",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "busNumber": { "type": "string" },
+        "routeName": { "type": "string" },
+        "shift": { "type": "string" },
+        "departureTime": { "type": "string" },
+        "driverName": { "type": "string" },
+        "driverPhone": { "type": "string" },
+        "driverUid": { "type": "string" },
+        "totalSeats": { "type": "number" },
+        "availableSeats": { "type": "number" },
+        "stops": { "type": "array" },
+        "status": { "type": "string", "enum": ["scheduled", "boarding", "in_transit", "completed"] },
+        "currentStop": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "busNumber", "routeName", "totalSeats", "availableSeats", "stops"]
+    },
+    "SeatReservation": {
+      "title": "SeatReservation",
+      "description": "Student seat booking for a specific bus route",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "busId": { "type": "string" },
+        "busNumber": { "type": "string" },
+        "routeName": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "seatNumber": { "type": "number" },
+        "destinationStop": { "type": "string" },
+        "bookingDate": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "checked_in", "cancelled"] },
+        "createdAt": { "type": "string" },
+        "checkedInAt": { "type": "string" }
+      },
+      "required": ["busId", "userId", "seatNumber", "destinationStop", "status"]
+    },
+    "StudentAttendance": {
+      "title": "StudentAttendance",
+      "description": "Student bus boarding attendance confirmation recorded via QR scan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentUid": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentEmail": { "type": "string" },
+        "studentId": { "type": "string" },
+        "busId": { "type": "string" },
+        "busNumber": { "type": "string" },
+        "routeName": { "type": "string" },
+        "scannedAt": { "type": "string" },
+        "date": { "type": "string" },
+        "boardingPoint": { "type": "string" },
+        "status": { "type": "string", "enum": ["confirmed", "flagged"] }
+      },
+      "required": ["id", "studentUid", "busId", "busNumber", "scannedAt", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores user roles and profile details"
+    },
+    "/buses/{busId}": {
+      "schema": "Bus",
+      "description": "Stores real-time bus route, seat availability, and transit status"
+    },
+    "/reservations/{reservationId}": {
+      "schema": "SeatReservation",
+      "description": "Stores student seat reservations and boarding passes"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "StudentAttendance",
+      "description": "Stores student bus check-in attendance records confirmed via QR scan"
+    }
+  }
+}
